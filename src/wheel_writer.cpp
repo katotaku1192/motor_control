@@ -15,13 +15,21 @@ int main(int argc, char **argv){
    
     geometry_msgs::Twist vel;
 
-    vel.linear.x = 0.05;
+
+    // linear speed [m/s]
+    double linear_speed = 0.00;
+    // angular speed [rad/s]
+    double angular_speed = 0.50;
+
+    double between_wheels = 0.326;
+
+    vel.linear.x = between_wheels / 2 * angular_speed;
     vel.linear.y = 0.0;
     vel.linear.z = 0.0;
 
     vel.angular.x = 0.0;
     vel.angular.y = 0.0;
-    vel.angular.z = 0.0;
+    vel.angular.z = -linear_speed;
    
     while(ros::ok()) {
         wheel_pub.publish(vel);
