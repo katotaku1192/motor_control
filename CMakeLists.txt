@@ -23,3 +23,6 @@ target_link_libraries(dynamixel_writer ${catkin_LIBRARIES})
 
 add_executable(wheel_writer src/wheel_writer.cpp)
 target_link_libraries(wheel_writer ${catkin_LIBRARIES})
+
+add_executable(ps4_wheel_writer src/ps4_wheel_writer.cpp)
+target_link_libraries(ps4_wheel_writer ${catkin_LIBRARIES})
