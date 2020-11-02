@@ -10,7 +10,8 @@ class JoyWheel{
     public:
         ros::NodeHandle nh;
         ros::Subscriber joy_sub;
-        ros::Publisher twist_pub;
+        ros::Publisher front_twist_pub;
+        ros::Publisher back_twist_pub;
     
         JoyWheel();
         void joy_callback(const sensor_msgs::Joy::ConstPtr& msg);
@@ -19,7 +20,8 @@ class JoyWheel{
 
 JoyWheel::JoyWheel(){
     joy_sub = nh.subscribe("/joy", 1, &JoyWheel::joy_callback, this);
-    twist_pub = nh.advertise<geometry_msgs::Twist>("/dynamixel_workbench/cmd_vel",1);
+    front_twist_pub = nh.advertise<geometry_msgs::Twist>("/front/dynamixel_workbench/cmd_vel",1);
+    back_twist_pub = nh.advertise<geometry_msgs::Twist>("/back/dynamixel_workbench/cmd_vel",1);
 }
 
 
@@ -32,12 +34,15 @@ void JoyWheel::joy_callback(const sensor_msgs::Joy::ConstPtr& msg){
         // max angular speed [rad/s]
         double max_angular_speed = 0.50;
 
+
+        // between wheels [m]
         double between_wheels = 0.326;
 
         twist.linear.x = -between_wheels / 2 * max_angular_speed * msg->axes[2];
         twist.angular.z = -max_linear_speed * msg->axes[5];
 
-        twist_pub.publish(twist);
+        front_twist_pub.publish(twist);
+        back_twist_pub.publish(twist);
     }
 
     else{
@@ -46,14 +51,14 @@ void JoyWheel::joy_callback(const sensor_msgs::Joy::ConstPtr& msg){
         twist.linear.x = 0.0;
         twist.angular.z = 0.0;
 
-        twist_pub.publish(twist);
+        front_twist_pub.publish(twist);
+        back_twist_pub.publish(twist);
     }
 }
 
 
 
 int main(int argc, char** argv) {
-    
     ros::init(argc, argv, "ps4_wheel_writer");
 
     JoyWheel joy_wheel;
