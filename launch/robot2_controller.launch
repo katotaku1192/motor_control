@@ -2,7 +2,11 @@
     <group ns="robot2">
         <include file="$(find motor_control)/launch/include/front_wheel_controller.launch"/>
         <include file="$(find motor_control)/launch/include/back_wheel_controller.launch"/>
-        <node pkg="joy" type="joy_node" name="joy_node"/>
-        <node pkg="motor_control" type="ps4_wheel_writer" name="ps4_wheel_writer"/>
+        <node pkg="joy" type="joy_node" name="joy_node">
+        <node pkg="motor_control" type="ps4_wheel_writer" name="ps4_wheel_writer">
+            <remap from="/joy" to="/robot2/joy"/>
+            <remap from="/front/dynamixel_workbench/cmd_vel" to="/robot2/front/dynamixel_workbench/cmd_vel"/>
+            <remap from="/back/dynamixel_workbench/cmd_vel" to="/robot2/back/dynamixel_workbench/cmd_vel"/>
+        </node>
     </group>
 </launch>
